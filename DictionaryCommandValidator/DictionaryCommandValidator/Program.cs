@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DictionaryCommandValidatorLib;
 
 namespace Api10CommandDataValidator
 {
@@ -7,11 +8,17 @@ namespace Api10CommandDataValidator
     {
         static void Main(string[] args)
         {
+            CommandValidator validator = new();
+            validator
+                //.AddSettings(PropertyValidateSettings.RequiredNotNull("nullable"))
+                .AddSettings(PropertyValidateSettings.RequiredNotEmptyString("emptyString"));
+
             var data = new Dictionary<string, object>()
             {
                 ["id"] = 111,
                 ["title"] = "Testing poll",
                 ["nullable"] = null,
+                ["emptyString"] = String.Empty,
                 ["pollQuestions"] = new Dictionary<string, object>[]
                 {
                     new Dictionary<string, object>()
@@ -35,6 +42,11 @@ namespace Api10CommandDataValidator
                     }
                 }
             };
+
+
+            validator.Validate(data, out string mess);
+            Console.WriteLine(mess);
+
             Console.ReadKey();
         }
     }
