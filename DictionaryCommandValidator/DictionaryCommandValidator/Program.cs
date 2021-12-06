@@ -20,6 +20,10 @@ namespace Api10CommandDataValidator
                 ["title"] = "Testing poll",
                 ["nullable"] = null,
                 ["emptyString"] = String.Empty,
+                ["dict"] = new Dictionary<string, object>()
+                {
+                    ["thiIsNotNull"] = null
+                },
                 ["pollQuestions"] = new Dictionary<string, object>[]
                 {
                     new Dictionary<string, object>()
@@ -47,8 +51,9 @@ namespace Api10CommandDataValidator
 
             Property ex = Property.Exist("pollQuestions.answerOptions.notexist");
             Property nn = Property.NotNull("pollQuestions.innerNUll");
+            Property nn1 = Property.NotNull("dict.thiIsNotNull");
             string mess = null;
-            Validator.Do(data, new Property[] { ex }, mess);
+            Validator.Do(data, new Property[] { nn1 }, out mess);
 
             //validator.Validate(data, out string mess);
             Console.WriteLine(mess);
