@@ -8,8 +8,6 @@ namespace DictionaryCommandValidator.Validation
 {
     abstract class BaseValidationRule
     {
-        public abstract bool ItFollows(object obj, string prop, out string faiMessage);
-        //public abstract bool IsSatisfy(object obj, string prop);
-        //public abstract string FailMessage(string prop);
+        public abstract bool IsValid(object obj, string prop, out string faiMessage);
     }
 }

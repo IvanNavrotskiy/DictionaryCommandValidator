@@ -1,7 +1,6 @@
 ﻿using DictionaryCommandValidator.Validation;
 using System;
 using System.Collections.Generic;
-//using DictionaryCommandValidatorLib;
 
 namespace Api10CommandDataValidator
 {
@@ -9,11 +8,6 @@ namespace Api10CommandDataValidator
     {
         static void Main(string[] args)
         {
-            //CommandValidator validator = new();
-            //validator
-                //.AddSettings(PropertyValidateSettings.RequiredNotNull("nullable"))
-                //.AddSettings(PropertyValidateSettings.RequiredNotEmptyString("emptyString"));
-
             var data = new Dictionary<string, object>()
             {
                 ["id"] = 111,
@@ -37,7 +31,7 @@ namespace Api10CommandDataValidator
                             new Dictionary<string, object>()
                             {
                                 ["text"] = "option1",
-                                ["order"] = 0
+                                ["order"] = 0                               
                             },
                             new Dictionary<string, object>()
                             {
@@ -49,14 +43,16 @@ namespace Api10CommandDataValidator
                 }
             };
 
-            Property ex = Property.Exist("pollQuestions.answerOptions.notexist");
-            Property nn = Property.NotNull("pollQuestions.innerNUll");
-            Property nn1 = Property.NotNull("dict.thiIsNotNull");
-            string mess = null;
-            Validator.Do(data, new Property[] { nn1 }, out mess);
+            ValidationProperty ex = ValidationProperty.Exist("pollQuestions.answerOptions.notexist");
+            ValidationProperty nn = ValidationProperty.NotNull("pollQuestions.innerNUll");
+            ValidationProperty nn1 = ValidationProperty.NotNull("dict.thiIsNotNull");
 
-            //validator.Validate(data, out string mess);
-            Console.WriteLine(mess);
+            var res = Validator.Do(data, new ValidationProperty[] { nn }, out string mess);
+
+            if (res)
+                Console.WriteLine("command is valid");
+            else
+                Console.WriteLine(mess);
 
             Console.ReadKey();
         }

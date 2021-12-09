@@ -8,7 +8,7 @@ namespace DictionaryCommandValidator.Validation
 {
     class PropertyNotNullValidationRule : BaseValidationRule
     {
-        public override bool ItFollows(object obj, string propName, out string faiMessage)
+        public override bool IsValid(object obj, string propName, out string faiMessage)
         {
             faiMessage = null;
             var dict = obj as Dictionary<string, object>;
