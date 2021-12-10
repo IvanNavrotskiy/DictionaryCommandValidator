@@ -47,7 +47,7 @@ namespace Api10CommandDataValidator
             ValidationProperty nn = ValidationProperty.NotNull("pollQuestions.innerNUll");
             ValidationProperty nn1 = ValidationProperty.NotNull("dict.thiIsNotNull");
 
-            var res = Validator.Do(data, new ValidationProperty[] { nn }, out string mess);
+            var res = Validator.Do(data, new ValidationProperty[] { ex }, out string mess);
 
             if (res)
                 Console.WriteLine("command is valid");

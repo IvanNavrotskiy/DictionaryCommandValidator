@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DictionaryCommandValidator.Validation
 {
-    class ValidationProperty
+    class ValidationProperty : ICloneable
     {
         private string _Message;
         public string[] PathArray { get; private set; }
@@ -23,23 +23,26 @@ namespace DictionaryCommandValidator.Validation
 
         }
 
-        public ValidationProperty GetChildProperty()
+        public bool IsValid(Dictionary<string, object> dict, out string message)
         {
-            return new ValidationProperty(PathArray.Skip(1).ToArray()) 
-            { 
-                Rules = this.Rules
-            };
-        }
-
-        public bool IsValid(object obj, out string message)
-        {
-            var fail = Rules?.FirstOrDefault(c => !c.IsValid(obj, String.Join(".", PathArray), out _Message));
+            var fail = Rules?.FirstOrDefault(c => !c.IsValid(dict, String.Join(".", PathArray), out _Message));
             message = _Message;
             return fail == null;
+        }
+
+        public object Clone()
+        {
+            return (ValidationProperty)this.MemberwiseClone();
+        }
+
+        public void ShiftPath()
+        {
+            PathArray = PathArray.Skip(1).ToArray();
         }
 
         public static ValidationProperty Exist(string prop) => new ValidationProperty(prop) { Rules = new BaseValidationRule[] { new  PropertyExistValidationRule()} };
         public static ValidationProperty NotNull(string prop) => new ValidationProperty(prop) { Rules = new BaseValidationRule[] { new  PropertyNotNullValidationRule()} };
         public ValidationProperty[] ToArray() => new ValidationProperty[] { this };
+
     }
 }

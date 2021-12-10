@@ -8,9 +8,9 @@ namespace DictionaryCommandValidator.Validation
 {
     class Validator
     {
-        public static bool Do(object obj, ValidationProperty[] props, out string message)
+        public static bool Do(object obj, ValidationProperty[] props, out string failMessage)
         {
-            message = null;
+            failMessage = null;
 
             if (obj == null)
                 throw new ArgumentNullException("obj");
@@ -26,7 +26,7 @@ namespace DictionaryCommandValidator.Validation
                 {
                     if (prop.PathLength == 1)
                     {
-                        if (prop.IsValid(item, out message))
+                        if (prop.IsValid(objDict, out failMessage))
                             continue;
                         else
                             return false;
@@ -34,20 +34,25 @@ namespace DictionaryCommandValidator.Validation
 
                     var step = prop.PathArray[0];
                     var value = objDict[step];
-                    var newProps = prop.GetChildProperty().ToArray();
+                    var newProp = (ValidationProperty)prop.Clone();
+                    newProp.ShiftPath();
 
                     if (value is Dictionary<string, object>)
                     {
-                        var result = Do(value as Dictionary<string, object>, newProps, out message);
-                        message = $"{step}:{message}";
-                        return result;
+                        var isValid = Do(value as Dictionary<string, object>, new[] { newProp }, out failMessage);
+                        if (!isValid) 
+                            failMessage = $"{step}.{failMessage}";
+
+                        return isValid;
                     }
 
                     if (value is object[])
                     {
-                        var result = Do(value as object[], newProps, out message);
-                        message = $"{step}.{message}";
-                        return result;
+                        var isValid = Do(value as object[], new[] { newProp }, out failMessage);
+                        if (!isValid)
+                            failMessage = $"{step}.{failMessage}";
+
+                        return isValid;
                     }
                 }
             }
