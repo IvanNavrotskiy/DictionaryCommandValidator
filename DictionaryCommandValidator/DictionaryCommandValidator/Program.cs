@@ -1,4 +1,4 @@
-﻿using DictionaryCommandValidator.Validation;
+﻿using DictionaryCommandValidator;
 using System;
 using System.Collections.Generic;
 
