@@ -7,3 +7,4 @@
 /DictionaryCommandValidator/DictionaryCommandValidator/bin/Debug/net5.0
 /DictionaryCommandValidatorLib/bin/Debug/net5.0
 /DictionaryCommandValidatorLib/obj
+*.sqlite-journal
