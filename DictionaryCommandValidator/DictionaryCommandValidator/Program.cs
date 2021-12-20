@@ -1,4 +1,4 @@
-﻿using DictionaryCommandValidator.Validation;
+﻿using DictionaryCommandValidator;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +8,7 @@ namespace Api10CommandDataValidator
     {
         static void Main(string[] args)
         {
-            var data = new Dictionary<string, object>()
+            var command = new Dictionary<string, object>()
             {
                 ["id"] = 111,
                 ["title"] = "Testing poll",
@@ -31,7 +31,7 @@ namespace Api10CommandDataValidator
                             new Dictionary<string, object>()
                             {
                                 ["text"] = "option1",
-                                ["order"] = 0                               
+                                ["order"] = 0
                             },
                             new Dictionary<string, object>()
                             {
@@ -43,11 +43,9 @@ namespace Api10CommandDataValidator
                 }
             };
 
-            ValidationProperty ex = ValidationProperty.Exist("pollQuestions.answerOptions.notexist");
-            ValidationProperty nn = ValidationProperty.NotNull("pollQuestions.innerNUll");
-            ValidationProperty nn1 = ValidationProperty.NotNull("dict.thiIsNotNull");
+            ValidationProperty nn1 = ValidationProperty.NotNull("properties.second.third.fourth.fifth.name");
 
-            var res = Validator.Do(data, new ValidationProperty[] { ex }, out string mess);
+            var res = Validator.Do(command, new ValidationProperty[] { nn1 }, out string mess);
 
             if (res)
                 Console.WriteLine("command is valid");
