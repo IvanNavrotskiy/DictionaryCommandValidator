@@ -8,12 +8,12 @@ namespace DictionaryCommandValidator.ValidationRules
 {
     internal class PropertyExistValidationRule : BaseValidationRule
     {
-        public override bool IsValid(Dictionary<string, object> dict, string propName, out string faiMessage)
+        public override bool IsValid(Dictionary<string, object> dict, string propName, out string failMessage)
         {
-            faiMessage = null;
+            failMessage = null;
             if (dict != null && !dict.ContainsKey(propName))
             {
-                faiMessage = $"{propName} not exist";
+                failMessage = $"{propName} not exist";
                 return false;
             }
 

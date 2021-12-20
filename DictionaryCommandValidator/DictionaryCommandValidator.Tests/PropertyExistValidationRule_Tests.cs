@@ -1,33 +1,15 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using DictionaryCommandValidator;
+using System.Net.Http.Headers;
 
 namespace DictionaryCommandValidator.Tests
 {
     [TestFixture]
-    public class ValidationTests
+    class PropertyExistValidationRule_Tests
     {
         [Test]
-        public void Validator_ValidInput()
-        {
-            Assert.IsTrue(Validator.Do(new object(), new ValidationProperty[0], out string message));
-        }
-
-        [Test]
-        public void Validator_InvalidInput_Command()
-        {
-            Assert.Throws<ArgumentNullException>(() => Validator.Do(null, new ValidationProperty[0], out string message));
-        }
-
-        [Test]
-        public void Validator_InvalidInput_Properties()
-        {
-            Assert.Throws<ArgumentNullException>(() => Validator.Do(new Dictionary<string, object>(), null, out string message));
-        }
-
-        [Test]
-        public void PropertyExistValidationRule_FirstNestingLevel_ValidationSuccess()
+        public void FirstNestingLevel_ValidationSuccess()
         {
             var command = new Dictionary<string, object>()
             {
@@ -37,11 +19,11 @@ namespace DictionaryCommandValidator.Tests
             };
 
             var exProperty = ValidationProperty.Exist("name");
-            Assert.IsTrue(Validator.Do(command, exProperty.ToArray(), out string message));            
+            ValidationResult.ValidationSuccess_SingleProperty(command, exProperty);
         }
 
         [Test]
-        public void PropertyExistValidationRule_FirstNestingLevel_ValidationFailure()
+        public void FirstNestingLevel_ValidationFailure()
         {
             var command = new Dictionary<string, object>()
             {
@@ -50,12 +32,11 @@ namespace DictionaryCommandValidator.Tests
             };
 
             var exProperty = ValidationProperty.Exist("name");
-            Assert.IsFalse(Validator.Do(command, exProperty.ToArray(), out string message));
-            Assert.AreEqual(message, "name not exist");
+            ValidationResult.ValidationFailure_SingleProperty(command, exProperty, "name not exist");
         }
 
         [Test]
-        public void PropertyExistValidationRule_SecondNestingLevel_ValidationSuccess()
+        public void SecondNestingLevel_ValidationSuccess()
         {
             var command = new Dictionary<string, object>()
             {
@@ -68,12 +49,11 @@ namespace DictionaryCommandValidator.Tests
             };
 
             var exProperty = ValidationProperty.Exist("properties.name");
-            Assert.IsTrue(Validator.Do(command, exProperty.ToArray(), out string message));
-            Assert.IsNull(message);
+            ValidationResult.ValidationSuccess_SingleProperty(command, exProperty);
         }
 
         [Test]
-        public void PropertyExistValidationRule_SecondNestingLevel_ValidationFailure()
+        public void SecondNestingLevel_ValidationFailure()
         {
             var command = new Dictionary<string, object>()
             {
@@ -83,12 +63,11 @@ namespace DictionaryCommandValidator.Tests
             };
 
             var exProperty = ValidationProperty.Exist("properties.name");
-            Assert.IsFalse(Validator.Do(command, exProperty.ToArray(), out string message));
-            Assert.AreEqual(message, "properties.name not exist");
+            ValidationResult.ValidationFailure_SingleProperty(command, exProperty, "properties.name not exist");
         }
 
         [Test]
-        public void PropertyExistValidationRule_SecondNestingLevel_Array_ValidationSuccess()
+        public void SecondNestingLevel_Array_ValidationSuccess()
         {
             var command = new Dictionary<string, object>()
             {
@@ -104,12 +83,11 @@ namespace DictionaryCommandValidator.Tests
             };
 
             var exProperty = ValidationProperty.Exist("properties.name");
-            Assert.IsTrue(Validator.Do(command, exProperty.ToArray(), out string message));
-            Assert.IsNull(message);
+            ValidationResult.ValidationSuccess_SingleProperty(command, exProperty);
         }
 
         [Test]
-        public void PropertyExistValidationRule_SecondNestingLevel_Array_ValidationFailure()
+        public void SecondNestingLevel_Array_ValidationFailure()
         {
             var command = new Dictionary<string, object>()
             {
@@ -122,12 +100,11 @@ namespace DictionaryCommandValidator.Tests
             };
 
             var exProperty = ValidationProperty.Exist("properties.name");
-            Assert.IsFalse(Validator.Do(command, exProperty.ToArray(), out string message));
-            Assert.AreEqual(message, "properties.name not exist");
+            ValidationResult.ValidationFailure_SingleProperty(command, exProperty, "properties.name not exist");
         }
 
         [Test]
-        public void PropertyExistValidationRule_FiveNestingLevel_Array_ValidationSuccess()
+        public void FiveNestingLevel_Array_ValidationSuccess()
         {
             var command = new Dictionary<string, object>()
             {
@@ -149,12 +126,11 @@ namespace DictionaryCommandValidator.Tests
             };
 
             var exProperty = ValidationProperty.Exist("properties.second.third.fourth.fifth.name");
-            Assert.IsTrue(Validator.Do(command, exProperty.ToArray(), out string message));
-            Assert.IsNull(message);
+            ValidationResult.ValidationSuccess_SingleProperty(command, exProperty);
         }
 
         [Test]
-        public void PropertyExistValidationRule_FiveNestingLevel_Array_ValidationFailure()
+        public void FiveNestingLevel_Array_ValidationFailure()
         {
             var command = new Dictionary<string, object>()
             {
@@ -176,8 +152,7 @@ namespace DictionaryCommandValidator.Tests
             };
 
             var exProperty = ValidationProperty.Exist("properties.second.third.fourth.fifth.name");
-            Assert.IsFalse(Validator.Do(command, exProperty.ToArray(), out string message));
-            Assert.AreEqual(message, "properties.second.third.fourth.fifth.name not exist");
+            ValidationResult.ValidationFailure_SingleProperty(command, exProperty, "properties.second.third.fourth.fifth.name not exist");
         }
     }
 }

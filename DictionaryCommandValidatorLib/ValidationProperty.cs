@@ -39,8 +39,15 @@ namespace DictionaryCommandValidator
             PathArray = PathArray.Skip(1).ToArray();
         }
 
-        public static ValidationProperty Exist(string prop) => new ValidationProperty(prop) { Rules = new BaseValidationRule[] { new  PropertyExistValidationRule()} };
-        public static ValidationProperty NotNull(string prop) => new ValidationProperty(prop) { Rules = new BaseValidationRule[] { new  PropertyNotNullValidationRule()} };
+        public static ValidationProperty Exist(string prop) => 
+            new ValidationProperty(prop) { Rules = new BaseValidationRule[] { new  PropertyExistValidationRule()} };
+
+        public static ValidationProperty NotNull(string prop) => 
+            new ValidationProperty(prop) { Rules = new BaseValidationRule[] { new  NotNullValidationRule()} };
+
+        public static ValidationProperty NotEmptyString(string prop) => 
+            new ValidationProperty(prop) { Rules = new BaseValidationRule[] { new NotEmptyStringValidationRule() } };
+
         public ValidationProperty[] ToArray() => new ValidationProperty[] { this };
 
     }
